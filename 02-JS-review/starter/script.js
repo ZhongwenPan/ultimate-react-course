@@ -142,3 +142,146 @@ function getBooks() {
 function getBook(id) {
   return data.find((d) => d.id === id);
 }
+
+//Destructuring (解构)
+
+const book = getBook(2);
+book;
+
+//
+const { title, author, pages, publicationDate, genres, hasMovieAdaptation } =
+  book;
+
+console.log(author);
+console.log(pages);
+
+console.log(genres);
+
+/*
+const primaryGrnre = genres[0];
+const secondaryGenre = genres[1];
+
+//Before:
+
+console.log(primaryGrnre);
+console.log(secondaryGenre);
+*/
+
+//After:
+const [primaryGrnre, secondaryGenre] = genres;
+
+console.log(primaryGrnre);
+console.log(secondaryGenre);
+
+//3th and 5th genre:
+const [, , thirdGenre, , fifthGenre] = genres;
+console.log(thirdGenre);
+console.log(fifthGenre);
+
+//Rest Operator:
+const newBook = getBook(2);
+
+console.log(newBook);
+
+const [newBookPrimaryGenre, newBookSecondaryGenre, ...otherGenres] =
+  newBook.genres;
+
+console.log(newBookPrimaryGenre);
+console.log(otherGenres);
+console.log(otherGenres[1]);
+
+//Rest Operator can only be put in the last!!!
+
+//Spread Operator:
+
+//If we want to overwrite a property in an object, the opject should be put at the beginning
+const newGenres = [...genres, "epic fantasy"];
+newGenres;
+
+const updatedNewBook = {
+  ...newBook,
+  //Adding a new property
+  moviePublicationDate: "2001-12-19",
+  //Overwriting a property
+  pages: 999,
+};
+
+console.log(updatedNewBook);
+
+//Short-circuiting and logocal operators:
+
+//Falsy values: false, '', 0, null, undifined
+
+// '&&' is usually used for checking falsy values
+//It returns the second value if the first one is 'true'
+console.log(true && "second value");
+console.log(false && "second value");
+console.log(0 && "second value");
+
+// '||' is usually used for checking trythy values
+// It returns the second value if the first value is 'false'
+console.log(0 || "second value");
+
+// '??' is usually used for checking null and undefined values
+// It returns the second value if the first is 'null' or 'undefined'
+console.log(null ?? "second value");
+
+// Optional Chaining
+function getTotalReviewCount(book) {
+  const goodread = book.reviews.goodreads.reviewsCount;
+  //If any part of 'book.reviews.librarythi' does not exist, JS will not continue getting data from it
+  const libraryread = book.reviews.librarythi?.reviewsCount ?? 0;
+  return goodread + libraryread;
+}
+
+console.log(getTotalReviewCount(book));
+
+// Map Method
+
+let x = [1, 2, 3, 4, 5].map((element) => element * 2);
+console.log(x);
+
+let books = getBooks();
+const titles = books.map((book) => book.title);
+console.log(titles);
+
+const essentialData = books.map((book) => {
+  return {
+    title: book.title,
+    author: book.author,
+    reviewsCount: getTotalReviewCount(book),
+  };
+});
+
+console.log(essentialData);
+
+// Filter Method:
+const longBooks = books.filter((book) => book.pages > 500);
+const longBooksNamesAndPages = longBooks.map((book) => {
+  return {
+    title: book.title,
+    pages: book.pages,
+  };
+});
+console.log(longBooksNamesAndPages);
+
+// Reduce Method:
+
+//0 is the starting value of the accmulator
+const pagesAllBooks = books.reduce((acc, book) => acc + book.pages, 0);
+console.log(pagesAllBooks);
+
+// Sort Method:
+const arr = [6, 4, 8, 2, 3];
+arr.sort((a, b) => b - a);
+console.log(arr);
+
+const sortedByPages = books.slice().sort((a, b) => b.pages - a.pages);
+const sortedByPagesNames = sortedByPages.map((book) => {
+  return {
+    title: book.title,
+    pages: book.pages,
+  };
+});
+
+console.log(sortedByPagesNames);
