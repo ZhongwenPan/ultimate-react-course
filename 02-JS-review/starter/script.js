@@ -308,3 +308,10 @@ const booksAfterUpdate = booksAfterDelete.map((book) =>
 );
 
 console.log(booksAfterUpdate);
+
+// 30: Async JS: promises
+fetch("https://jsonplaceholder.typicode.com/todos")
+  .then((res) => res.json())
+  .then((data) => console.log(data));
+
+console.log("Zhongwen");
